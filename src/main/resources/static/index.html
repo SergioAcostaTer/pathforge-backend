@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PathForge — Avatar Generator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f11;
+      color: #e2e2e7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #1a1a1f;
+      border: 1px solid #2a2a32;
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #6b6b78;
+      margin-bottom: 2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #9999a8;
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: #0f0f11;
+      border: 1px solid #2a2a32;
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      color: #e2e2e7;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 1.2rem;
+    }
+
+    input[type="text"]:focus { border-color: #5b5bff; }
+
+    .drop-zone {
+      border: 2px dashed #2a2a32;
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .drop-zone.over { border-color: #5b5bff; background: #16162a; }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-zone .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+
+    .drop-zone .hint {
+      font-size: 0.8rem;
+      color: #6b6b78;
+    }
+
+    .drop-zone .file-name {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #5b5bff;
+    }
+
+    .preview-img {
+      display: none;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 0.75rem auto 0;
+    }
+
+    button {
+      width: 100%;
+      background: #5b5bff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+    }
+
+    button:hover:not(:disabled) { background: #4a4ae8; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .result {
+      display: none;
+      margin-top: 2rem;
+      border-top: 1px solid #2a2a32;
+      padding-top: 1.5rem;
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #6b6b78;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.75rem;
+    }
+
+    .avatar-img {
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    .meta {
+      font-size: 0.75rem;
+      color: #6b6b78;
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    .meta span { color: #9999a8; }
+
+    .error-box {
+      display: none;
+      margin-top: 1.2rem;
+      background: #2a1010;
+      border: 1px solid #5a1a1a;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      color: #ff7070;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>PathForge Avatar Generator</h1>
+  <p class="subtitle">Upload a photo and get a stylized 3D developer avatar.</p>
+
+  <label for="userId">User ID</label>
+  <input type="text" id="userId" placeholder="e.g. user-123" />
+
+  <label>Photo</label>
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="imageInput" accept="image/*" />
+    <div class="icon">🖼️</div>
+    <div class="hint">Click or drag an image here</div>
+    <div class="file-name" id="fileName"></div>
+    <img class="preview-img" id="preview" alt="preview" />
+  </div>
+
+  <button id="generateBtn" disabled>Generate Avatar</button>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <div class="result" id="result">
+    <div class="result-label">Generated Avatar</div>
+    <img class="avatar-img" id="avatarImg" alt="Generated avatar" />
+    <div class="meta">
+      <div><span>Avatar ID: </span><span id="metaId"></span></div>
+      <div><span>Expires: </span><span id="metaExpires"></span></div>
+      <div style="margin-top:0.4rem"><span>URL: </span><a id="metaUrl" href="#" target="_blank" style="color:#5b5bff; word-break:break-all;"></a></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const userIdInput = document.getElementById('userId');
+  const imageInput  = document.getElementById('imageInput');
+  const dropZone    = document.getElementById('dropZone');
+  const fileName    = document.getElementById('fileName');
+  const preview     = document.getElementById('preview');
+  const generateBtn = document.getElementById('generateBtn');
+  const errorBox    = document.getElementById('errorBox');
+  const result      = document.getElementById('result');
+
+  function checkReady() {
+    generateBtn.disabled = !(userIdInput.value.trim() && imageInput.files.length > 0);
+  }
+
+  userIdInput.addEventListener('input', checkReady);
+
+  imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+    fileName.textContent = file.name;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+    checkReady();
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('over');
+    if (e.dataTransfer.files.length) {
+      imageInput.files = e.dataTransfer.files;
+      imageInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  generateBtn.addEventListener('click', async () => {
+    errorBox.style.display = 'none';
+    result.style.display   = 'none';
+    generateBtn.disabled   = true;
+    generateBtn.innerHTML  = '<span class="spinner"></span>Generating…';
+
+    const form = new FormData();
+    form.append('user_id', userIdInput.value.trim());
+    form.append('image',   imageInput.files[0]);
+
+    try {
+      const res = await fetch('/api/avatars/generate', { method: 'POST', body: form });
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError(data.detail || data.title || `Error ${res.status}`);
+        return;
+      }
+
+      document.getElementById('avatarImg').src   = data.avatar_url;
+      document.getElementById('metaId').textContent = data.avatar_id;
+      document.getElementById('metaUrl').href       = data.avatar_url;
+      document.getElementById('metaUrl').textContent = data.avatar_url;
+      document.getElementById('metaExpires').textContent =
+        new Date(new Date(data.created_at).getTime() + 10 * 60 * 1000).toLocaleTimeString();
+
+      result.style.display = 'block';
+
+    } catch (err) {
+      showError('Network error: ' + err.message);
+    } finally {
+      generateBtn.disabled  = false;
+      generateBtn.textContent = 'Generate Avatar';
+    }
+  });
+
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

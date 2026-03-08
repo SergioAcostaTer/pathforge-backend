@@ -37,8 +37,8 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+### VS Code — commit launch/tasks, ignore personal settings ###
+.vscode/settings.json
 
 
 .*/
