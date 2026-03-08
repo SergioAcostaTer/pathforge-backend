@@ -4,7 +4,7 @@ spring:
 
   jackson:
     property-naming-strategy: SNAKE_CASE
-    serialization-inclusion: non_null
+    default-property-inclusion: non_null
 
 server:
   port: ${SERVER_PORT:8080}
