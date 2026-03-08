@@ -41,6 +41,9 @@ public class AvatarController {
         if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("user_id is required");
         }
+        if (!userId.matches("[a-zA-Z0-9_-]+")) {
+            throw new IllegalArgumentException("user_id must contain only letters, digits, hyphens or underscores");
+        }
         if (image.isEmpty()) {
             throw new IllegalArgumentException("image must not be empty");
         }

@@ -1,5 +1,6 @@
 package com.pathforge.backend.avatar.adapter.out.fal;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,8 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
     private final FalProperties falProperties;
 
     public FalAvatarGeneratorAdapter(
-            WebClient falWebClient,
-            WebClient downloadWebClient,
+            @Qualifier("falWebClient") WebClient falWebClient,
+            @Qualifier("downloadWebClient") WebClient downloadWebClient,
             FalProperties falProperties
     ) {
         this.falWebClient = falWebClient;

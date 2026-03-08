@@ -2,17 +2,13 @@ package com.pathforge.backend.avatar.config;
 
 import java.net.URI;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -27,16 +23,10 @@ class AvatarConfig {
     private static final int MAX_IN_MEMORY_SIZE = 10 * 1024 * 1024;
 
     @Bean
-    WebClient falWebClient(FalProperties falProperties, ObjectMapper globalObjectMapper) {
-        ObjectMapper falMapper = globalObjectMapper.copy()
-                .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-
+    @Qualifier("falWebClient")
+    WebClient falWebClient(FalProperties falProperties) {
         ExchangeStrategies strategies = ExchangeStrategies.builder()
-                .codecs(c -> {
-                    c.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE);
-                    c.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(falMapper, MediaType.APPLICATION_JSON));
-                    c.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(falMapper, MediaType.APPLICATION_JSON));
-                })
+                .codecs(c -> c.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE))
                 .build();
 
         return WebClient.builder()
@@ -48,6 +38,7 @@ class AvatarConfig {
     }
 
     @Bean
+    @Qualifier("downloadWebClient")
     WebClient downloadWebClient() {
         ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(c -> c.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE))
