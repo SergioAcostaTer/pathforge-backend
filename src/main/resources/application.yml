@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: pathforge-backend
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+
+# ---------------------------------------------------------------------------
+# Fal.ai configuration
+# Override via environment variables: FAL_API_KEY, FAL_BASE_URL, FAL_MODEL
+# ---------------------------------------------------------------------------
+fal:
+  api-key: ${FAL_API_KEY:}
+  base-url: ${FAL_BASE_URL:https://fal.run}
+  model: ${FAL_MODEL:fal-ai/flux/dev}
+
+# ---------------------------------------------------------------------------
+# Cloudflare R2 storage configuration (AWS S3-compatible)
+# Override via: R2_BUCKET, R2_ENDPOINT, R2_ACCESS_KEY, R2_SECRET_KEY, R2_PUBLIC_URL
+# ---------------------------------------------------------------------------
+storage:
+  r2:
+    bucket: ${R2_BUCKET:pathforge-avatars}
+    endpoint: ${R2_ENDPOINT:https://<account-id>.r2.cloudflarestorage.com}
+    access-key: ${R2_ACCESS_KEY:}
+    secret-key: ${R2_SECRET_KEY:}
+    public-url: ${R2_PUBLIC_URL:https://assets.pathforge.dev}
+
+logging:
+  level:
+    com.pathforge: DEBUG
+    software.amazon.awssdk: WARN
