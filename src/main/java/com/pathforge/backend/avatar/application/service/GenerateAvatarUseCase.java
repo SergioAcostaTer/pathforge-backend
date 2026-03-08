@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 
 import com.pathforge.backend.avatar.application.ImageData;
 import com.pathforge.backend.avatar.application.port.in.GenerateAvatarCommand;
+import com.pathforge.backend.avatar.application.port.out.AvatarGenerator;
+import com.pathforge.backend.avatar.application.port.out.AvatarRepository;
 import com.pathforge.backend.avatar.domain.Avatar;
 
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.pathforge.backend.avatar.application.port.out.AvatarGenerator;
-import main.java.com.pathforge.backend.avatar.application.port.out.AvatarRepository;
 
 @Slf4j
 @Service

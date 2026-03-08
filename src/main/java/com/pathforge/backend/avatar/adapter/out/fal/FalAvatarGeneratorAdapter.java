@@ -1,10 +1,10 @@
 package com.pathforge.backend.avatar.adapter.out.fal;
 
 import java.io.IOException;
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
@@ -13,11 +13,11 @@ import org.springframework.web.client.RestClient;
 import com.pathforge.backend.avatar.adapter.out.fal.dto.FalGenerateRequest;
 import com.pathforge.backend.avatar.adapter.out.fal.dto.FalGenerateResponse;
 import com.pathforge.backend.avatar.application.ImageData;
+import com.pathforge.backend.avatar.application.port.out.AvatarGenerator;
 import com.pathforge.backend.avatar.config.FalProperties;
 import com.pathforge.backend.avatar.domain.exception.AvatarGenerationException;
 
 import lombok.extern.slf4j.Slf4j;
-import main.java.com.pathforge.backend.avatar.application.port.out.AvatarGenerator;
 
 @Slf4j
 @Component
