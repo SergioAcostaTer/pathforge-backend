@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pathforge.backend.avatar.adapter.in.web.dto.GenerateAvatarResponse;
-import com.pathforge.backend.avatar.application.GenerateAvatarCommand;
-import com.pathforge.backend.avatar.application.GenerateAvatarUseCase;
 import com.pathforge.backend.avatar.application.ImageData;
+import com.pathforge.backend.avatar.application.port.in.GenerateAvatarCommand;
+import com.pathforge.backend.avatar.application.service.GenerateAvatarUseCase;
 import com.pathforge.backend.avatar.domain.Avatar;
 import com.pathforge.backend.avatar.domain.exception.AvatarGenerationException;
 import com.pathforge.backend.avatar.domain.exception.AvatarStorageException;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/avatars")
+@RequestMapping("/api/v1/avatars")
 @RequiredArgsConstructor
 public class AvatarController {
 
@@ -36,8 +36,7 @@ public class AvatarController {
     @PostMapping(value = "/generate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GenerateAvatarResponse> generateAvatar(
             @RequestParam("user_id") String userId,
-            @RequestPart("image") MultipartFile image
-    ) throws IOException {
+            @RequestPart("image") MultipartFile image) throws IOException {
         if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("user_id is required");
         }

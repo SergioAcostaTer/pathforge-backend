@@ -26,3 +26,7 @@ logging:
   level:
     com.pathforge: INFO
     software.amazon.awssdk: WARN
+
+pathforge:
+  avatar:
+    default-prompt: "3D stylized cartoon avatar portrait of a software developer, upper body, modern hoodie, studio lighting, centered composition, minimal light gray background, high quality illustration, professional look, vibrant colors, smooth shading"

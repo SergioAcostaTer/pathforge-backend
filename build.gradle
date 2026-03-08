@@ -34,7 +34,6 @@ dependencyManagement {
 dependencies {
 	// --- Web ---
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'  // WebClient for Fal.ai HTTP calls
 
 	// --- Security ---
 	implementation 'org.springframework.boot:spring-boot-starter-security'

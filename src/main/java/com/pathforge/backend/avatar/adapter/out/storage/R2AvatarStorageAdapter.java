@@ -6,13 +6,13 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import com.pathforge.backend.avatar.application.AvatarRepository;
 import com.pathforge.backend.avatar.application.ImageData;
 import com.pathforge.backend.avatar.config.R2Properties;
 import com.pathforge.backend.avatar.domain.exception.AvatarStorageException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import main.java.com.pathforge.backend.avatar.application.port.out.AvatarRepository;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -78,10 +78,10 @@ public class R2AvatarStorageAdapter implements AvatarRepository {
 
     private String buildObjectKey(String prefix, String contentType) {
         String ext = switch (contentType) {
-            case "image/png"  -> "png";
+            case "image/png" -> "png";
             case "image/webp" -> "webp";
-            case "image/gif"  -> "gif";
-            default           -> "jpg";
+            case "image/gif" -> "gif";
+            default -> "jpg";
         };
         return String.format("%s/%s-%s.%s",
                 prefix, Instant.now().toEpochMilli(), UUID.randomUUID().toString().substring(0, 8), ext);

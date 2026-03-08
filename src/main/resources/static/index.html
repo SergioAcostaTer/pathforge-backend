@@ -260,7 +260,7 @@
     form.append('image',   imageInput.files[0]);
 
     try {
-      const res = await fetch('/api/avatars/generate', { method: 'POST', body: form });
+      const res = await fetch('/api/v1/avatars/generate', { method: 'POST', body: form });
       const data = await res.json();
 
       if (!res.ok) {
