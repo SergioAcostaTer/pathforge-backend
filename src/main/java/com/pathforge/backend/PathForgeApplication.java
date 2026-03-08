@@ -2,13 +2,10 @@ package com.pathforge.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import com.pathforge.backend.config.FalProperties;
-import com.pathforge.backend.config.R2Properties;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ FalProperties.class, R2Properties.class })
+@ConfigurationPropertiesScan  // auto-discovers all @ConfigurationProperties in this package
 public class PathForgeApplication {
 
     public static void main(String[] args) {
