@@ -47,7 +47,7 @@ public class AvatarController {
         }
         MultipartFile selectedImage = (image != null && !image.isEmpty()) ? image : file;
         if (selectedImage == null || selectedImage.isEmpty()) {
-            throw new IllegalArgumentException("image must not be empty");
+            throw new IllegalArgumentException("No image file provided");
         }
 
         log.info("Avatar generation request for userId={}, file={}, size={}",
@@ -84,18 +84,18 @@ public class AvatarController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ProblemDetail> handleIllegalArgument(IllegalArgumentException ex) {
-        log.warn("Invalid request: {}", ex.getMessage());
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        problem.setTitle("Invalid Request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+        return badRequest("Invalid request: {}", ex.getMessage(), ex.getMessage());
     }
 
     @ExceptionHandler(MissingServletRequestPartException.class)
     public ResponseEntity<ProblemDetail> handleMissingPart(MissingServletRequestPartException ex) {
-        log.warn("Invalid multipart request: {}", ex.getMessage());
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,
+        return badRequest("Invalid multipart request: {}", ex.getMessage(),
                 "Required multipart field is missing. Send user_id and image file as form-data.");
+    }
+
+    private ResponseEntity<ProblemDetail> badRequest(String logTemplate, String logArg, String detail) {
+        log.warn(logTemplate, logArg);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
         problem.setTitle("Invalid Request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }

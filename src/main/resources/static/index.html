@@ -250,7 +250,7 @@
   });
 
   generateBtn.addEventListener('click', async () => {
-    const selectedFile = imageInput.files && imageInput.files[0] ? imageInput.files[0] : null;
+    const selectedFile = imageInput.files[0] || null;
     if (!selectedFile) {
       showError('Please select an image file before generating.');
       return;
