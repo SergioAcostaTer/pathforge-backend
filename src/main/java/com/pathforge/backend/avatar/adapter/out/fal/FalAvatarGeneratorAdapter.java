@@ -45,7 +45,7 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
         FalGenerateResponse falResponse = falRestClient.post()
                 .uri("/" + falProperties.model())
                 .header(HttpHeaders.AUTHORIZATION, AUTH_HEADER_PREFIX + falProperties.apiKey())
-                .body(FalGenerateRequest.of(prompt, negativePrompt, sourceImageUrl))
+                .body(FalGenerateRequest.of(prompt, sourceImageUrl))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                     throw new AvatarGenerationException(

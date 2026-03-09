@@ -1,6 +1,9 @@
 spring:
   application:
     name: pathforge-backend
+  output:
+    ansi:
+      enabled: always
 
   jackson:
     property-naming-strategy: SNAKE_CASE
@@ -12,7 +15,7 @@ server:
 fal:
   api-key: ${FAL_API_KEY}
   base-url: ${FAL_BASE_URL:https://fal.run}
-  model: ${FAL_MODEL:fal-ai/flux/dev}
+  model: ${FAL_MODEL:fal-ai/flux/dev/image-to-image}
 
 storage:
   r2:
@@ -29,19 +32,11 @@ logging:
 pathforge:
   avatar:
     default-prompt: >-
-      professional stylized avatar portrait of the same person,
-      front facing,
-      neutral expression,
-      shoulders visible,
-      centered composition,
-      soft studio lighting,
-      clean minimal gradient background,
-      modern product design style,
-      smooth skin shading,
-      high quality digital illustration,
-      symmetrical face,
-      consistent lighting,
-      professional app avatar
+      modern flat illustration avatar of the same person,
+      dribbble style,
+      clean vector shapes,
+      minimal shading,
+      professional profile picture
     negative-prompt: >-
       side view,
       profile,
