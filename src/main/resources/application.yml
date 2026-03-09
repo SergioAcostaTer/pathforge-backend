@@ -29,12 +29,30 @@ logging:
 pathforge:
   avatar:
     default-prompt: >-
-      3D animated character portrait in Pixar/Disney render quality.
-      Faithfully preserve the subject's exact facial structure, skin tone, hair color,
-      hair style, eye color, and all distinctive physical features from the reference photo.
-      Waist-up composition, perfectly centered on a uniform soft light gray background (#EBEBEB).
-      Three-point studio lighting: soft key light from upper left, gentle fill from right,
-      subtle blue rim light from behind. No harsh shadows.
-      Casual modern everyday outfit in neutral muted tones.
-      Smooth 3D surface shading, clean strong outlines, large expressive eyes, high-fidelity face detail.
-      Vibrant yet natural color palette. No text, no watermark, no artifacts.
+      professional stylized avatar portrait of the same person,
+      front facing,
+      neutral expression,
+      shoulders visible,
+      centered composition,
+      soft studio lighting,
+      clean minimal gradient background,
+      modern product design style,
+      smooth skin shading,
+      high quality digital illustration,
+      symmetrical face,
+      consistent lighting,
+      professional app avatar
+    negative-prompt: >-
+      side view,
+      profile,
+      open mouth,
+      smiling widely,
+      exaggerated cartoon,
+      distorted face,
+      extra eyes,
+      extra mouth,
+      bad anatomy,
+      blurry,
+      noise,
+      shadow on face,
+      dramatic lighting

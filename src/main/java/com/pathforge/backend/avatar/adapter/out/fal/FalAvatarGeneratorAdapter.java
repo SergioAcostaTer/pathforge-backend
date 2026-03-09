@@ -39,13 +39,13 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
     }
 
     @Override
-    public ImageData generate(String sourceImageUrl, String prompt) {
+    public ImageData generate(String sourceImageUrl, String prompt, String negativePrompt) {
         log.debug("Calling Fal.ai model={}", falProperties.model());
 
         FalGenerateResponse falResponse = falRestClient.post()
                 .uri("/" + falProperties.model())
                 .header(HttpHeaders.AUTHORIZATION, AUTH_HEADER_PREFIX + falProperties.apiKey())
-                .body(FalGenerateRequest.of(prompt, sourceImageUrl))
+                .body(FalGenerateRequest.of(prompt, negativePrompt, sourceImageUrl))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                     throw new AvatarGenerationException(
@@ -61,15 +61,11 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
             throw new AvatarGenerationException("Fal.ai returned an empty response");
         }
 
-        FalGenerateResponse.FalImage falImage = falResponse.firstImage();
+        var falImage = falResponse.firstImage();
         log.debug("Fal.ai generated image URL: {}", falImage.url());
 
-        byte[] imageBytes = downloadImageBytes(falImage.url());
-        String contentType = (falImage.contentType() != null && !falImage.contentType().isBlank())
-                ? falImage.contentType()
-                : "image/jpeg";
-
-        return new ImageData(imageBytes, contentType);
+        var ct = falImage.contentType();
+        return new ImageData(downloadImageBytes(falImage.url()), ct != null && !ct.isBlank() ? ct : "image/jpeg");
     }
 
     private byte[] downloadImageBytes(String imageUrl) {

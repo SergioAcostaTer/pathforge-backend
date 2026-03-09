@@ -66,20 +66,12 @@ public class AvatarController {
 
     @ExceptionHandler(AvatarGenerationException.class)
     public ResponseEntity<ProblemDetail> handleGenerationException(AvatarGenerationException ex) {
-        log.error("Avatar generation failed: {}", ex.getMessage(), ex);
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_GATEWAY, "Avatar generation service unavailable: " + ex.getMessage());
-        problem.setTitle("Avatar Generation Failed");
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(problem);
+        return gatewayError("Avatar Generation Failed", "Avatar generation service unavailable", ex);
     }
 
     @ExceptionHandler(AvatarStorageException.class)
     public ResponseEntity<ProblemDetail> handleStorageException(AvatarStorageException ex) {
-        log.error("Avatar storage failed: {}", ex.getMessage(), ex);
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_GATEWAY, "Avatar storage service unavailable: " + ex.getMessage());
-        problem.setTitle("Avatar Storage Failed");
-        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(problem);
+        return gatewayError("Avatar Storage Failed", "Avatar storage service unavailable", ex);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -91,6 +83,14 @@ public class AvatarController {
     public ResponseEntity<ProblemDetail> handleMissingPart(MissingServletRequestPartException ex) {
         return badRequest("Invalid multipart request: {}", ex.getMessage(),
                 "Required multipart field is missing. Send user_id and image file as form-data.");
+    }
+
+    private ResponseEntity<ProblemDetail> gatewayError(String title, String service, Exception ex) {
+        log.error("{}: {}", service, ex.getMessage(), ex);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_GATEWAY, "%s: %s".formatted(service, ex.getMessage()));
+        problem.setTitle(title);
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(problem);
     }
 
     private ResponseEntity<ProblemDetail> badRequest(String logTemplate, String logArg, String detail) {

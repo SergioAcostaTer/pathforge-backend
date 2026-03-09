@@ -4,5 +4,5 @@ import com.pathforge.backend.avatar.application.ImageData;
 
 public interface AvatarGenerator {
 
-    ImageData generate(String sourceImageUrl, String prompt);
+    ImageData generate(String sourceImageUrl, String prompt, String negativePrompt);
 }
