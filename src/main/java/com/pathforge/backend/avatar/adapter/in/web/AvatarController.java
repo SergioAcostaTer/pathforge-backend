@@ -50,9 +50,6 @@ public class AvatarController {
             throw new IllegalArgumentException("No image file provided");
         }
 
-        log.info("Avatar generation request for userId={}, file={}, size={}",
-                userId, selectedImage.getOriginalFilename(), selectedImage.getSize());
-
         String contentType = selectedImage.getContentType() != null ? selectedImage.getContentType() : "image/jpeg";
         ImageData sourceImage = new ImageData(selectedImage.getBytes(), contentType);
         Avatar avatar = generateAvatarUseCase.execute(new GenerateAvatarCommand(userId, sourceImage));

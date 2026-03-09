@@ -5,18 +5,20 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record FalGenerateResponse(
-        List<FalImage> images,
-        Long seed
+        List<ImageFile> images,
+        String description
 ) {
 
-    public record FalImage(
+    public record ImageFile(
             String url,
-            int width,
-            int height,
-            @JsonProperty("content_type") String contentType
+            @JsonProperty("content_type") String contentType,
+            @JsonProperty("file_name") String fileName,
+            @JsonProperty("file_size") Long fileSize,
+            Integer width,
+            Integer height
     ) {}
 
-    public FalImage firstImage() {
+    public ImageFile firstImage() {
         if (images == null || images.isEmpty()) {
             throw new IllegalStateException("Fal.ai returned no images in response");
         }

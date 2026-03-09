@@ -39,7 +39,7 @@ public class R2AvatarStorageAdapter implements AvatarRepository {
         String bucket = r2Properties.bucket();
         try {
             r2Client.headBucket(b -> b.bucket(bucket));
-            log.info("R2 bucket '{}' is ready", bucket);
+            log.debug("R2 bucket '{}' is ready", bucket);
         } catch (NoSuchBucketException e) {
             log.info("R2 bucket '{}' not found — creating it", bucket);
             r2Client.createBucket(b -> b.bucket(bucket));

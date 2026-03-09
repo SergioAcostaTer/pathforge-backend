@@ -40,18 +40,29 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
 
     @Override
     public ImageData generate(String sourceImageUrl, String prompt, String negativePrompt) {
-        log.debug("Calling Fal.ai model={}", falProperties.model());
+        var request = FalGenerateRequest.of(prompt, sourceImageUrl);
+        log.info("""
+                Fal.ai request →
+                  model          : {}
+                  imageUrls      : {}
+                  aspectRatio    : {}
+                  outputFormat   : {}
+                  safetyTolerance: {}
+                  prompt         : {}""",
+                falProperties.model(), request.imageUrls(),
+                request.aspectRatio(), request.outputFormat(), request.safetyTolerance(),
+                prompt);
 
         FalGenerateResponse falResponse = falRestClient.post()
                 .uri("/" + falProperties.model())
                 .header(HttpHeaders.AUTHORIZATION, AUTH_HEADER_PREFIX + falProperties.apiKey())
-                .body(FalGenerateRequest.of(prompt, sourceImageUrl))
+                .body(request)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                .onStatus(HttpStatusCode::is4xxClientError, (req, response) -> {
                     throw new AvatarGenerationException(
                             "Fal.ai rejected the request (status=%s): %s".formatted(response.getStatusCode(), responseBody(response)));
                 })
-                .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
+                .onStatus(HttpStatusCode::is5xxServerError, (req, response) -> {
                     throw new AvatarGenerationException(
                             "Fal.ai server error (status=%s): %s".formatted(response.getStatusCode(), responseBody(response)));
                 })
@@ -62,7 +73,8 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
         }
 
         var falImage = falResponse.firstImage();
-        log.debug("Fal.ai generated image URL: {}", falImage.url());
+        log.info("Fal.ai response → imageUrl={}, contentType={}, size={}x{}",
+                falImage.url(), falImage.contentType(), falImage.width(), falImage.height());
 
         var ct = falImage.contentType();
         return new ImageData(downloadImageBytes(falImage.url()), ct != null && !ct.isBlank() ? ct : "image/jpeg");
@@ -73,7 +85,7 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
             byte[] bytes = downloadRestClient.get()
                     .uri(imageUrl)
                     .retrieve()
-                    .onStatus(HttpStatusCode::isError, (request, response) -> {
+                    .onStatus(HttpStatusCode::isError, (req, response) -> {
                         throw new AvatarGenerationException(
                                 "Failed to download generated image from Fal.ai CDN: status=%s".formatted(response.getStatusCode()));
                     })

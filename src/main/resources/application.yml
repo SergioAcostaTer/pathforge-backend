@@ -15,7 +15,7 @@ server:
 fal:
   api-key: ${FAL_API_KEY}
   base-url: ${FAL_BASE_URL:https://fal.run}
-  model: ${FAL_MODEL:fal-ai/flux/dev/image-to-image}
+  model: ${FAL_MODEL:fal-ai/nano-banana/edit}
 
 storage:
   r2:
@@ -32,22 +32,30 @@ logging:
 pathforge:
   avatar:
     default-prompt: >-
-      modern flat illustration avatar of the same person,
-      dribbble style,
-      clean vector shapes,
-      minimal shading,
-      professional profile picture
+      transform this person into a 3D Pixar-style cartoon avatar,
+      keep the face and identity of the person,
+      upper body portrait with arms crossed,
+      dark navy blazer over white t-shirt,
+      subtle confident smile,
+      soft warm studio lighting,
+      transparent background,
+      smooth stylized 3D render,
+      highly detailed face,
+      clean polished professional profile picture
     negative-prompt: >-
-      side view,
-      profile,
-      open mouth,
-      smiling widely,
-      exaggerated cartoon,
+      full body,
+      sitting,
+      hands at sides,
+      different outfit,
+      harsh shadows,
+      flat illustration,
+      2D,
+      anime,
       distorted face,
-      extra eyes,
-      extra mouth,
-      bad anatomy,
       blurry,
-      noise,
-      shadow on face,
-      dramatic lighting
+      extra limbs,
+      bad anatomy,
+      dark background,
+      busy background,
+      watermark,
+      text

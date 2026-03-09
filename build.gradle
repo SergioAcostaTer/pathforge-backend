@@ -51,6 +51,9 @@ dependencies {
     // --- AWS SDK v2 ---
     implementation 'software.amazon.awssdk:s3'
 
+    // --- Image processing ---
+    implementation 'net.coobird:thumbnailator:0.4.20'
+
     // --- Utilities ---
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
