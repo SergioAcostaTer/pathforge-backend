@@ -250,6 +250,12 @@
   });
 
   generateBtn.addEventListener('click', async () => {
+    const selectedFile = imageInput.files && imageInput.files[0] ? imageInput.files[0] : null;
+    if (!selectedFile) {
+      showError('Please select an image file before generating.');
+      return;
+    }
+
     errorBox.style.display = 'none';
     result.style.display   = 'none';
     generateBtn.disabled   = true;
@@ -257,7 +263,7 @@
 
     const form = new FormData();
     form.append('user_id', userIdInput.value.trim());
-    form.append('image',   imageInput.files[0]);
+    form.append('image', selectedFile);
 
     try {
       const res = await fetch('/api/v1/avatars/generate', { method: 'POST', body: form });
