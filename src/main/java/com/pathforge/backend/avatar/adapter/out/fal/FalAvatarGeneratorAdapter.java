@@ -49,13 +49,11 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                     throw new AvatarGenerationException(
-                            "Fal.ai rejected the request (status=" + response.getStatusCode() + "): "
-                                    + responseBody(response));
+                            "Fal.ai rejected the request (status=%s): %s".formatted(response.getStatusCode(), responseBody(response)));
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
                     throw new AvatarGenerationException(
-                            "Fal.ai server error (status=" + response.getStatusCode() + "): "
-                                    + responseBody(response));
+                            "Fal.ai server error (status=%s): %s".formatted(response.getStatusCode(), responseBody(response)));
                 })
                 .body(FalGenerateResponse.class);
 
@@ -81,8 +79,7 @@ public class FalAvatarGeneratorAdapter implements AvatarGenerator {
                     .retrieve()
                     .onStatus(HttpStatusCode::isError, (request, response) -> {
                         throw new AvatarGenerationException(
-                                "Failed to download generated image from Fal.ai CDN: status="
-                                        + response.getStatusCode());
+                                "Failed to download generated image from Fal.ai CDN: status=%s".formatted(response.getStatusCode()));
                     })
                     .body(byte[].class);
 

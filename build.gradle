@@ -43,6 +43,7 @@ dependencies {
 
 	// --- Environment (.env support) ---
 	implementation 'me.paulschwarz:spring-dotenv:4.0.0'
+    developmentOnly("me.paulschwarz:springboot4-dotenv")
 
 	// --- AWS SDK v2 — Cloudflare R2 (S3-compatible) ---
 	implementation 'software.amazon.awssdk:s3'

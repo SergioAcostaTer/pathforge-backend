@@ -60,16 +60,17 @@ class AvatarConfig {
     URI r2Endpoint(R2Properties r2) {
         String raw = Objects.requireNonNullElse(r2.endpoint(), "").trim();
         if (raw.isEmpty()) {
-            throw new IllegalStateException(
-                    "Missing storage.r2.endpoint (R2_ENDPOINT). Set it to your Cloudflare R2 endpoint, "
-                            + "for example: https://<accountid>.r2.cloudflarestorage.com");
+            throw new IllegalStateException("""
+                    Missing storage.r2.endpoint (R2_ENDPOINT). \
+                    Set it to your Cloudflare R2 endpoint, \
+                    for example: https://<accountid>.r2.cloudflarestorage.com""");
         }
         String withScheme = raw.contains("://") ? raw : "https://" + raw;
         URI uri = URI.create(withScheme);
         if (uri.getScheme() == null || uri.getHost() == null) {
             throw new IllegalStateException(
-                    "Invalid storage.r2.endpoint (R2_ENDPOINT): " + raw
-                            + ". Expected a valid URL like https://<accountid>.r2.cloudflarestorage.com");
+                    "Invalid storage.r2.endpoint (R2_ENDPOINT): %s. Expected a valid URL like https://<accountid>.r2.cloudflarestorage.com"
+                            .formatted(raw));
         }
         return uri;
     }
@@ -84,7 +85,7 @@ class AvatarConfig {
     private String requireNonBlank(String propertyName, String value, String envVariable) {
         String normalized = Objects.requireNonNullElse(value, "").trim();
         if (normalized.isEmpty()) {
-            throw new IllegalStateException("Missing " + propertyName + " (" + envVariable + ").");
+            throw new IllegalStateException("Missing %s (%s).".formatted(propertyName, envVariable));
         }
         return normalized;
     }

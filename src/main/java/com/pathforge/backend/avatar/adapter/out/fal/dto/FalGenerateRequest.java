@@ -13,6 +13,6 @@ public record FalGenerateRequest(
 ) {
 
     public static FalGenerateRequest of(String prompt, String imageUrl) {
-        return new FalGenerateRequest(prompt, imageUrl, 28, 3.5, 1, "jpeg", true);
+        return new FalGenerateRequest(prompt, imageUrl, 35, 4.5, 1, "jpeg", true);
     }
 }

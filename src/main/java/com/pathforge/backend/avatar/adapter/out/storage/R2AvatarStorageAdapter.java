@@ -66,7 +66,7 @@ public class R2AvatarStorageAdapter implements AvatarRepository {
             case "image/gif" -> "gif";
             default -> "jpg";
         };
-        String key = keyPrefix + "/" + Instant.now().toEpochMilli() + "-" + UUID.randomUUID().toString().substring(0, 8) + "." + ext;
+        String key = "%s/%d-%s.%s".formatted(keyPrefix, Instant.now().toEpochMilli(), UUID.randomUUID().toString().substring(0, 8), ext);
         log.debug("Uploading to R2: bucket={} key={}", r2Properties.bucket(), key);
 
         try {
@@ -86,7 +86,7 @@ public class R2AvatarStorageAdapter implements AvatarRepository {
 
         } catch (S3Exception e) {
             log.error("R2 upload failed key={}: {}", key, e.awsErrorDetails().errorMessage(), e);
-            throw new AvatarStorageException("Failed to upload to storage: " + e.awsErrorDetails().errorMessage(), e);
+            throw new AvatarStorageException("Failed to upload to storage: %s".formatted(e.awsErrorDetails().errorMessage()), e);
         }
     }
 }
