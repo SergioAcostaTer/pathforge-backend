@@ -32,24 +32,22 @@ logging:
 pathforge:
   avatar:
     default-prompt: >-
-      transform this person into a Pixar movie 3D character,
+      transform this person into a stylized 3D avatar,
       keep the exact face and identity of the person,
       upper body portrait, shoulders and chest visible,
-      large expressive cartoon eyes, smooth plastic-like skin,
-      slightly enlarged head with realistic Pixar proportions,
+      semi-realistic proportions, slightly stylized features,
+      smooth clean skin, natural eye size,
       dark navy blazer over white t-shirt,
       subtle confident smile,
-      soft warm three-point studio lighting,
+      soft warm studio lighting,
       transparent background,
-      ultra clean polished 3D render, toy figurine quality,
-      Pixar animation studio style, professional avatar
+      high quality polished 3D render, professional avatar
     negative-prompt: >-
-      realistic skin texture,
       photorealistic,
-      small eyes,
+      overly cartoon,
+      exaggerated eyes,
+      toy figurine,
       full body,
-      gray background,
-      solid background,
       harsh shadows,
       flat illustration,
       2D,
