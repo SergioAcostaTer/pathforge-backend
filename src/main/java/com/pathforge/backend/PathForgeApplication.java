@@ -50,7 +50,7 @@ public class PathForgeApplication {
         log.info(GREEN + "  Profile:   {}" + RESET, profiles);
         log.info(GREEN + "  Local:     http://localhost:{}" + RESET, port);
         log.info(GREEN + "  External:  http://{}:{}" + RESET, host, port);
-        log.info(CYAN  + "  API:       http://localhost:{}/api/v1/avatars/generate" + RESET, port);
+        log.info(CYAN + "  API:       http://localhost:{}/index.html" + RESET, port);
         log.info(YELLOW + "──────────────────────────────────────────────" + RESET);
     }
 }
