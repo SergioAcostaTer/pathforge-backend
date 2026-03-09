@@ -20,6 +20,7 @@ import com.pathforge.backend.avatar.application.ImageData;
 import com.pathforge.backend.avatar.application.port.in.GenerateAvatarCommand;
 import com.pathforge.backend.avatar.application.service.GenerateAvatarUseCase;
 import com.pathforge.backend.avatar.domain.Avatar;
+import com.pathforge.backend.avatar.domain.AvatarStyle;
 import com.pathforge.backend.avatar.domain.exception.AvatarGenerationException;
 import com.pathforge.backend.avatar.domain.exception.AvatarStorageException;
 
@@ -37,6 +38,7 @@ public class AvatarController {
     @PostMapping(value = "/generate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GenerateAvatarResponse> generateAvatar(
             @RequestParam("user_id") String userId,
+            @RequestParam(value = "style", required = false) AvatarStyle style,
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
         if (userId == null || userId.isBlank()) {
@@ -52,7 +54,7 @@ public class AvatarController {
 
         String contentType = selectedImage.getContentType() != null ? selectedImage.getContentType() : "image/jpeg";
         ImageData sourceImage = new ImageData(selectedImage.getBytes(), contentType);
-        Avatar avatar = generateAvatarUseCase.execute(new GenerateAvatarCommand(userId, sourceImage));
+        Avatar avatar = generateAvatarUseCase.execute(new GenerateAvatarCommand(userId, sourceImage, style));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new GenerateAvatarResponse(
                 avatar.id(),

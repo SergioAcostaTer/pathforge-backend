@@ -31,28 +31,4 @@ logging:
 
 pathforge:
   avatar:
-    default-prompt: >-
-      transform this person into a 3D cartoon avatar,
-      preserve the exact face and identity of the person,
-      upper body portrait, shoulders and chest visible,
-      slightly cartoonish stylized features, mildly expressive eyes,
-      smooth stylized skin, subtle cartoon proportions,
-      dark navy blazer over white t-shirt,
-      subtle confident smile,
-      soft warm studio lighting,
-      pure white background,
-      high quality polished 3D render, professional app avatar
-    negative-prompt: >-
-      photorealistic,
-      hyperrealistic,
-      full body,
-      overly exaggerated cartoon,
-      extreme Pixar proportions,
-      harsh shadows,
-      flat illustration,
-      2D,
-      anime,
-      distorted face,
-      blurry,
-      watermark,
-      text
+    default-style: PIXAR

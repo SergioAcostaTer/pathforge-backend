@@ -1,8 +1,9 @@
 package com.pathforge.backend.avatar.application.port.in;
 
 import com.pathforge.backend.avatar.application.ImageData;
+import com.pathforge.backend.avatar.domain.AvatarStyle;
 
-public record GenerateAvatarCommand(String userId, ImageData sourceImage) {
+public record GenerateAvatarCommand(String userId, ImageData sourceImage, AvatarStyle style) {
 
     public GenerateAvatarCommand {
         if (userId == null || userId.isBlank())

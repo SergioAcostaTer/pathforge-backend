@@ -10,6 +10,7 @@ import com.pathforge.backend.avatar.application.port.out.AvatarRepository;
 import com.pathforge.backend.avatar.application.port.out.BackgroundRemover;
 import com.pathforge.backend.avatar.config.AvatarProperties;
 import com.pathforge.backend.avatar.domain.Avatar;
+import com.pathforge.backend.avatar.domain.AvatarStyle;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +27,13 @@ public class GenerateAvatarUseCase {
     private final BackgroundRemover backgroundRemover;
 
     public Avatar execute(GenerateAvatarCommand command) {
+        AvatarStyle style = command.style() != null ? command.style() : avatarProperties.defaultStyle();
+        log.info("Generating avatar for userId={} style={}", command.userId(), style);
+
         ImageData normalized = imageResizer.resize(command.sourceImage());
         String sourceImageUrl = avatarRepository.storeSourceImage(command.userId(), normalized);
         ImageData generatedAvatar = avatarGenerator.generate(
-                sourceImageUrl, avatarProperties.defaultPrompt(), avatarProperties.negativePrompt());
+                sourceImageUrl, style.prompt(), style.negativePrompt());
         ImageData transparentAvatar = backgroundRemover.removeBackground(generatedAvatar);
         String avatarUrl = avatarRepository.storeAvatar(command.userId(), transparentAvatar);
         return Avatar.create(command.userId(), avatarUrl);
